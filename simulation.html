@@ -34,7 +34,11 @@
       </header>
 
       <nav class="tab-nav">
-        <button class="tab-btn active" data-era="ancient" data-tab="tab-scytale">
+        <button
+          class="tab-btn active"
+          data-era="ancient"
+          data-tab="tab-scytale"
+        >
           스키테일
         </button>
         <button class="tab-btn" data-era="ancient" data-tab="tab-caesar">
@@ -61,12 +65,12 @@
       </nav>
 
       <!-- TAB 1 · 고대 암호 -->
-            <section class="panel active" id="tab-scytale">
+      <section class="panel active" id="tab-scytale">
         <div class="panel-header">
           <span class="era-badge badge-ancient">고대</span>
           <div>
             <h2>스키테일 암호</h2>
-            <span class="sub">기원전 5세기 · 스파르타</span>
+            <span class="sub">기원전 4세기 · 스파르타</span>
           </div>
         </div>
         <div class="sim-solo">
@@ -78,19 +82,29 @@
             <div class="sim-card-body">
               <div class="field">
                 <label>입력 텍스트</label>
-                <textarea id="scytale-text" placeholder="암호화할 메시지를 입력하세요..."></textarea>
+                <textarea
+                  id="scytale-text"
+                  placeholder="암호화할 메시지를 입력하세요..."
+                ></textarea>
               </div>
               <div class="field">
                 <label>원통 둘레 (Key)</label>
                 <input type="number" id="scytale-key" value="4" min="2" />
               </div>
               <div class="btn-row">
-                <button class="btn btn-run-ancient" onclick="encryptScytale()">암호화</button>
-                <button class="btn btn-reset" onclick="resetScytale()">초기화</button>
+                <button class="btn btn-run-ancient" onclick="encryptScytale()">
+                  암호화
+                </button>
+                <button class="btn btn-reset" onclick="resetScytale()">
+                  초기화
+                </button>
               </div>
               <div>
                 <div class="step-label">변환 결과</div>
-                <div class="output-box highlight-ancient" id="scytale-output"></div>
+                <div
+                  class="output-box highlight-ancient"
+                  id="scytale-output"
+                ></div>
               </div>
             </div>
           </div>
@@ -102,7 +116,7 @@
           <span class="era-badge badge-ancient">고대</span>
           <div>
             <h2>카이사르 암호</h2>
-            <span class="sub">기원전 58년 · 로마</span>
+            <span class="sub">BC 1세기 · 로마</span>
           </div>
         </div>
         <div class="sim-solo">
@@ -114,19 +128,35 @@
             <div class="sim-card-body">
               <div class="field">
                 <label>입력 텍스트 (영문)</label>
-                <textarea id="caesar-text" placeholder="암호화할 메시지를 입력하세요..."></textarea>
+                <textarea
+                  id="caesar-text"
+                  placeholder="암호화할 메시지를 입력하세요..."
+                ></textarea>
               </div>
               <div class="field">
                 <label>이동 값 (Shift · 1~25)</label>
-                <input type="number" id="caesar-key" value="3" min="1" max="25" />
+                <input
+                  type="number"
+                  id="caesar-key"
+                  value="3"
+                  min="1"
+                  max="25"
+                />
               </div>
               <div class="btn-row">
-                <button class="btn btn-run-ancient" onclick="encryptCaesar()">암호화</button>
-                <button class="btn btn-reset" onclick="resetCaesar()">초기화</button>
+                <button class="btn btn-run-ancient" onclick="encryptCaesar()">
+                  암호화
+                </button>
+                <button class="btn btn-reset" onclick="resetCaesar()">
+                  초기화
+                </button>
               </div>
               <div>
                 <div class="step-label">변환 결과</div>
-                <div class="output-box highlight-ancient" id="caesar-output"></div>
+                <div
+                  class="output-box highlight-ancient"
+                  id="caesar-output"
+                ></div>
               </div>
             </div>
           </div>
@@ -134,11 +164,11 @@
       </section>
 
       <!-- TAB 2 · 중세 암호 -->
-                  <section class="panel" id="tab-alberti">
+      <section class="panel" id="tab-alberti">
         <div id="albertiMount"></div>
       </section>
 
-            <section class="panel" id="tab-vigenere">
+      <section class="panel" id="tab-vigenere">
         <div id="vigMount"></div>
       </section>
 
@@ -161,14 +191,26 @@
                 <div class="hex-cell">
                   <div class="hex-label">평문 데이터 (Hex 16자리 · 64bit)</div>
                   <div class="hex-field">
-                    <input class="hex-input" type="text" id="des-data" maxlength="16" value="0123456789ABCDEF" />
+                    <input
+                      class="hex-input"
+                      type="text"
+                      id="des-data"
+                      maxlength="16"
+                      value="0123456789ABCDEF"
+                    />
                     <div class="hex-ghost" id="des-data-ghost"></div>
                   </div>
                 </div>
                 <div class="hex-cell">
                   <div class="hex-label">라운드 키 (Hex 12자리 · 48bit)</div>
                   <div class="hex-field">
-                    <input class="hex-input" type="text" id="des-key" maxlength="12" value="132435465768" />
+                    <input
+                      class="hex-input"
+                      type="text"
+                      id="des-key"
+                      maxlength="12"
+                      value="132435465768"
+                    />
                     <div class="hex-ghost" id="des-key-ghost"></div>
                   </div>
                 </div>
@@ -219,7 +261,9 @@
                   class="output-box highlight-modern"
                   id="des-final"
                   style="font-weight: 700"
-                >—</div>
+                >
+                  —
+                </div>
               </div>
             </div>
           </div>
@@ -245,14 +289,26 @@
                 <div class="hex-cell">
                   <div class="hex-label">평문 데이터 (Hex 32자리 · 16byte)</div>
                   <div class="hex-field">
-                    <input class="hex-input" type="text" id="aes-data" maxlength="32" value="00112233445566778899AABBCCDDEEFF" />
+                    <input
+                      class="hex-input"
+                      type="text"
+                      id="aes-data"
+                      maxlength="32"
+                      value="00112233445566778899AABBCCDDEEFF"
+                    />
                     <div class="hex-ghost" id="aes-data-ghost"></div>
                   </div>
                 </div>
                 <div class="hex-cell">
                   <div class="hex-label">라운드 키 (Hex 32자리 · 16byte)</div>
                   <div class="hex-field">
-                    <input class="hex-input" type="text" id="aes-key" maxlength="32" value="000102030405060708090A0B0C0D0E0F" />
+                    <input
+                      class="hex-input"
+                      type="text"
+                      id="aes-key"
+                      maxlength="32"
+                      value="000102030405060708090A0B0C0D0E0F"
+                    />
                     <div class="hex-ghost" id="aes-key-ghost"></div>
                   </div>
                 </div>
@@ -299,7 +355,9 @@
                   class="output-box highlight-modern"
                   id="aes-final"
                   style="font-weight: 700"
-                >—</div>
+                >
+                  —
+                </div>
               </div>
             </div>
           </div>
@@ -371,7 +429,9 @@
                   class="output-box highlight-modern"
                   id="rsa-final"
                   style="font-weight: 700"
-                >—</div>
+                >
+                  —
+                </div>
               </div>
             </div>
           </div>
@@ -416,7 +476,9 @@
                     max-height: 64px;
                     overflow: hidden;
                   "
-                >—</div>
+                >
+                  —
+                </div>
               </div>
               <div>
                 <div class="step-label">2단계 · 512bit 패딩 완성</div>
@@ -429,7 +491,9 @@
                     max-height: 52px;
                     overflow: hidden;
                   "
-                >—</div>
+                >
+                  —
+                </div>
               </div>
               <div>
                 <div class="step-label">
@@ -476,13 +540,14 @@
                   class="output-box highlight-hash"
                   id="sha-final"
                   style="font-weight: 700; word-break: break-all"
-                >—</div>
+                >
+                  —
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
     </div>
 
     <script src="shared.js"></script>
