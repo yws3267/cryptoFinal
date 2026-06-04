@@ -1,8 +1,8 @@
-# 암호학의 역사 (Cryptography Through the Ages)
+# 암호학의 역사 (History of Cryptography)
 
 고대부터 현대까지 암호학의 흐름을 **타임라인**과 **인터랙티브 시뮬레이터**로 배우는
 멀티 페이지 교육용 웹사이트입니다. 프레임워크·빌드 과정 없이 순수
-**HTML · CSS · Vanilla JavaScript** 로만 구현했습니다.
+**HTML · CSS · JavaScript** 로만 구현했습니다.
 
 ---
 
