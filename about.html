@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>팀 소개</title>
+    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="about.css" />
+    <style>
+      /* about.css 의 body 배경을 흰색으로 덮어쓰기 */
+      body {
+      }
+      .page-body {
+        padding: 40px 30px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <span class="sidebar-title">MENU</span>
+        <button id="toggle-btn">☰</button>
+      </div>
+      <ul class="menu-list">
+        <li><a href="index.html">홈</a></li>
+        <li><a href="timeline.html">타임라인</a></li>
+        <li><a href="simulation.html">시뮬레이션</a></li>
+        <li class="team-tab"><a href="about.html">팀 소개</a></li>
+      </ul>
+    </nav>
+
+    <div class="page-body" id="page-body">
+      <section class="about-section">
+        <header class="about-header">
+          <h1>개발자들</h1>
+        </header>
+        <div class="team-grid">
+          <div class="team-card">
+            <h3>고연우</h3>
+            <p class="desc">메인 페이지 총괄, 암호화 시뮬레이션 최종 검수</p>
+            <a href="https://github.com/yws3267">github</a>
+            <a href="https://portfolio-wp-eight.vercel.app/">portfolio</a>
+            <a href="https://yws3267.tistory.com/">blog</a>
+          </div>
+          <div class="team-card">
+            <h3>김명준</h3>
+            <p class="desc">암호화 시뮬레이션 페이지 기초 설계</p>
+            <a href="https://github.com/k35864316-spec" target="_blank"
+              >github</a
+            >
+            <a href="https://portpolio-sable.vercel.app/" target="_blank"
+              >portfolio</a
+            >
+            <a href="https://blog75369.tistory.com/" target="_blank">blog</a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="shared.js"></script>
+  </body>
+</html>

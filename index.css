@@ -1,0 +1,124 @@
+/* ── 페이지 레이아웃 ── */
+.content-area {
+  padding: 40px 30px 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+header h1 {
+  text-align: center;
+  color: #1e293b;
+  font-size: 2.2rem;
+  margin-bottom: 48px;
+}
+
+/* ── 암호학이란 박스 ── */
+.intro-box {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 22px 28px;
+  margin-bottom: 36px;
+  background: #fff;
+}
+
+.intro-box h2 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: #334155;
+  margin: 0 0 10px 0;
+  text-align: center;
+}
+
+.intro-box p {
+  font-size: 0.9rem;
+  color: #475569;
+  text-align: center;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── 4개 시대 박스 ── */
+.phases-wrapper {
+  display: flex;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.phase {
+  flex: 1;
+  border-radius: 8px;
+  padding: 20px 16px;
+  background: #ffffff;
+  border: 1.5px solid #d1d5db;
+  height: auto;
+  min-height: 300px;
+  overflow: visible;
+  transition: transform 0.3s, border-color 0.3s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.phase:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+}
+
+.phase:hover .phase-header h2 {
+  color: var(--accent);
+}
+
+.phase-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.phase-header h2 {
+  font-size: 1.05rem;
+  margin: 0;
+  text-transform: uppercase;
+  color: #334155;
+  transition: color 0.3s;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.card {
+  background: #f9fafb;
+  padding: 9px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: #334155;
+  border: 1px solid #e5e7eb;
+}
+
+.card.main {
+  border-left: 3px solid var(--accent);
+}
+
+/* ── 반응형 ── */
+@media (max-width: 1024px) {
+  .phases-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .phases-wrapper {
+    grid-template-columns: 1fr;
+  }
+  header h1 {
+    font-size: 1.6rem;
+  }
+  .nav-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+}

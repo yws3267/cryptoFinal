@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Pretendard:wght@400;600;700&display=swap');
+
+/* ── timeline 전용 변수 (shared.css의 --accent:#6366f1 활용) ── */
+:root {
+  --accent-orange: #ea580c;
+  --accent-green:  #16a34a;
+  --border-color:  #e5e7eb;
+  --text-main:     #1e293b;
+  --text-muted:    #64748b;
+  --card-bg:       #ffffff;
+}
+
+/* body는 shared.css가 처리 (display:flex, bg:#fff) */
+body {
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  color: var(--text-main);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 50px 20px 100px;
+}
+
+/* 페이지 헤더 */
+.page-header {
+  text-align: center;
+  margin-bottom: 50px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 24px;
+}
+.page-header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+}
+.page-header p {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ── 타임라인 네비게이션 ── */
+.timeline-wrapper { margin-bottom: 60px; }
+
+.timeline {
+  position: relative;
+  height: 180px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(99,102,241,0.08);
+  border: 1px solid #e0e7ff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8%;
+}
+
+.timeline-line {
+  position: absolute;
+  left: 8%; right: 8%;
+  top: 50%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-orange), var(--accent), var(--accent), #7c3aed);
+  border-radius: 999px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.event {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  z-index: 2;
+  width: 130px;
+  user-select: none;
+}
+
+.dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  border: 4px solid var(--accent);
+  box-shadow: 0 0 0 5px rgba(99,102,241,0.2);
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+.event:hover .dot,
+.event.active .dot {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 8px rgba(99,102,241,0.25);
+  border-color: #4f46e5;
+}
+
+.label {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #334155;
+  transition: color 0.2s;
+}
+.event.top    .label { bottom: 35px; }
+.event.bottom .label { top:    35px; }
+.event.active .label { color: var(--accent); }
+
+/* ── 콘텐츠 섹션 ── */
+.content-section { display: none; animation: fadeIn 0.4s ease forwards; }
+.content-section.active { display: block; }
+
+.section-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #0f172a;
+  border-left: 5px solid var(--accent);
+  padding-left: 14px;
+}
+
+/* ── 카드 그리드 ── */
+.crypto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+.crypto-card {
+  background: #ffffff;
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.crypto-card:hover {
+  transform: translateY(-4px);
+  border-color: #c7d2fe;
+  box-shadow: 0 10px 20px rgba(99,102,241,0.08);
+}
+
+.card-header { margin-bottom: 14px; }
+
+.crypto-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  letter-spacing: 0.04em;
+}
+
+/* 태그 색상 — 암호 시뮬레이션의 시대별 테마색과 통일 */
+/* ancient #db2777 · medieval #d97706 · modern(대칭/공개키) #059669 · hash #6366f1 */
+.tag-ancient    { background: rgba(219, 39, 119, 0.10);  color: #db2777; }
+.tag-medieval   { background: rgba(217, 119, 6, 0.10);   color: #d97706; }
+.tag-earlymodern{ background: rgba(124, 58, 237, 0.10);  color: #7c3aed; }
+.tag-sym        { background: rgba(5, 150, 105, 0.10);   color: #059669; }
+.tag-asym       { background: rgba(5, 150, 105, 0.10);   color: #059669; }
+.tag-hash       { background: rgba(99, 102, 241, 0.10);  color: #6366f1; }
+
+.crypto-card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+  color: #1e293b;
+}
+.crypto-card .period-info {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: monospace;
+  margin-bottom: 12px;
+}
+.crypto-card p {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.75;
+  margin: 0 0 20px 0;
+  text-align: justify;
+}
+
+/* 핵심 설명 박스 */
+.concept-box {
+  background: #f8fafc;
+  border-left: 3px solid var(--accent);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.82rem;
+  color: #4338ca;
+  line-height: 1.6;
+}
+.tag-asym   ~ .concept-box { border-left-color: #7c3aed; color: #7c3aed; }
+.tag-hash   ~ .concept-box { border-left-color: var(--accent-green); color: var(--accent-green); }
+.tag-ancient~ .concept-box { border-left-color: var(--accent-orange); color: var(--accent-orange); }
+
+/* 이미지 */
+.card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: block;
+}
+.card-img.contain {
+  object-fit: contain;
+  background: #f8fafc;
+  padding: 10px;
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 현대 암호학 섹션: 카드 4개가 스크롤 없이 한눈에 들어오도록 compact ── */
+#modern-sec .crypto-grid {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+}
+#modern-sec .crypto-card { padding: 18px; border-radius: 12px; }
+#modern-sec .crypto-card h3 { font-size: 1.08rem; }
+#modern-sec .crypto-card p {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+#modern-sec .crypto-tag { font-size: 0.66rem; margin-bottom: 9px; }
+#modern-sec .period-info { margin-bottom: 9px; }
+#modern-sec .concept-box { font-size: 0.76rem; padding: 9px 12px; }
+
+/* ── 반응형 ── */
+@media (max-width: 900px) {
+  .timeline { height: 120px; padding: 0 4%; }
+  .label { font-size: 0.8rem; }
+  .event.top    .label { bottom: 25px; }
+  .event.bottom .label { top: 25px; }
+  .crypto-grid { grid-template-columns: 1fr; }
+}

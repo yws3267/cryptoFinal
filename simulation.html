@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>암호화 시뮬레이터</title>
+    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="simulation.css" />
+    <style>
+      /* cipher_simulation 내부는 page-body 안에서 자체 레이아웃 유지 */
+      .page-body {
+        display: block;
+      }
+      /* 기존 site-header는 sticky이므로 page-body 안에서도 정상 작동 */
+    </style>
+  </head>
+  <body>
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <span class="sidebar-title">MENU</span>
+        <button id="toggle-btn">☰</button>
+      </div>
+      <ul class="menu-list">
+        <li><a href="index.html">홈</a></li>
+        <li><a href="timeline.html">타임라인</a></li>
+        <li><a href="simulation.html">시뮬레이션</a></li>
+        <li class="team-tab"><a href="about.html">팀 소개</a></li>
+      </ul>
+    </nav>
+
+    <div class="page-body" id="page-body">
+      <header class="site-header">
+        <p>암호학 시뮬레이터 · 고대 → 현대</p>
+      </header>
+
+      <nav class="tab-nav">
+        <button class="tab-btn active" data-era="ancient" data-tab="tab-scytale">
+          스키테일
+        </button>
+        <button class="tab-btn" data-era="ancient" data-tab="tab-caesar">
+          카이사르
+        </button>
+        <button class="tab-btn" data-era="medieval" data-tab="tab-alberti">
+          알베르티
+        </button>
+        <button class="tab-btn" data-era="medieval" data-tab="tab-vigenere">
+          비즈네르
+        </button>
+        <button class="tab-btn" data-era="modern" data-tab="tab-des">
+          DES
+        </button>
+        <button class="tab-btn" data-era="modern" data-tab="tab-aes">
+          AES
+        </button>
+        <button class="tab-btn" data-era="modern" data-tab="tab-rsa">
+          RSA
+        </button>
+        <button class="tab-btn" data-era="hash" data-tab="tab-sha">
+          SHA-256
+        </button>
+      </nav>
+
+      <!-- TAB 1 · 고대 암호 -->
+            <section class="panel active" id="tab-scytale">
+        <div class="panel-header">
+          <span class="era-badge badge-ancient">고대</span>
+          <div>
+            <h2>스키테일 암호</h2>
+            <span class="sub">기원전 5세기 · 스파르타</span>
+          </div>
+        </div>
+        <div class="sim-solo">
+          <div class="sim-card">
+            <div class="sim-card-header">
+              <h3 style="color: var(--ancient)">스키테일 암호</h3>
+              <span class="sim-sub">전치(Transposition) 방식</span>
+            </div>
+            <div class="sim-card-body">
+              <div class="field">
+                <label>입력 텍스트</label>
+                <textarea id="scytale-text" placeholder="암호화할 메시지를 입력하세요..."></textarea>
+              </div>
+              <div class="field">
+                <label>원통 둘레 (Key)</label>
+                <input type="number" id="scytale-key" value="4" min="2" />
+              </div>
+              <div class="btn-row">
+                <button class="btn btn-run-ancient" onclick="encryptScytale()">암호화</button>
+                <button class="btn btn-reset" onclick="resetScytale()">초기화</button>
+              </div>
+              <div>
+                <div class="step-label">변환 결과</div>
+                <div class="output-box highlight-ancient" id="scytale-output"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-caesar">
+        <div class="panel-header">
+          <span class="era-badge badge-ancient">고대</span>
+          <div>
+            <h2>카이사르 암호</h2>
+            <span class="sub">기원전 58년 · 로마</span>
+          </div>
+        </div>
+        <div class="sim-solo">
+          <div class="sim-card">
+            <div class="sim-card-header">
+              <h3 style="color: var(--ancient)">카이사르 암호</h3>
+              <span class="sim-sub">단일 치환(Substitution) 방식</span>
+            </div>
+            <div class="sim-card-body">
+              <div class="field">
+                <label>입력 텍스트 (영문)</label>
+                <textarea id="caesar-text" placeholder="Encrypt your message..."></textarea>
+              </div>
+              <div class="field">
+                <label>이동 값 (Shift · 1~25)</label>
+                <input type="number" id="caesar-key" value="3" min="1" max="25" />
+              </div>
+              <div class="btn-row">
+                <button class="btn btn-run-ancient" onclick="encryptCaesar()">암호화</button>
+                <button class="btn btn-reset" onclick="resetCaesar()">초기화</button>
+              </div>
+              <div>
+                <div class="step-label">변환 결과</div>
+                <div class="output-box highlight-ancient" id="caesar-output"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2 · 중세 암호 -->
+                  <section class="panel" id="tab-alberti">
+        <div id="albertiMount"></div>
+      </section>
+
+            <section class="panel" id="tab-vigenere">
+        <div id="vigMount"></div>
+      </section>
+
+      <!-- TAB 3 · DES -->
+      <section class="panel" id="tab-des">
+        <div class="panel-header">
+          <span class="era-badge badge-modern">대칭키</span>
+          <div>
+            <h2>DES 라운드 시뮬레이터</h2>
+            <span class="sub">Data Encryption Standard · 1977</span>
+          </div>
+        </div>
+        <div class="sim-grid" style="max-width: 800px">
+          <div class="sim-card" style="grid-column: 1/-1">
+            <div class="sim-card-header">
+              <h3 style="color: var(--modern)">Feistel 구조 1라운드</h3>
+            </div>
+            <div class="sim-card-body">
+              <div class="des-two-col">
+                <div class="hex-cell">
+                  <div class="hex-label">평문 데이터 (Hex 16자리 · 64bit)</div>
+                  <div class="hex-field">
+                    <input class="hex-input" type="text" id="des-data" maxlength="16" value="0123456789ABCDEF" />
+                    <div class="hex-ghost" id="des-data-ghost"></div>
+                  </div>
+                </div>
+                <div class="hex-cell">
+                  <div class="hex-label">라운드 키 (Hex 12자리 · 48bit)</div>
+                  <div class="hex-field">
+                    <input class="hex-input" type="text" id="des-key" maxlength="12" value="132435465768" />
+                    <div class="hex-ghost" id="des-key-ghost"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-row" style="max-width: 360px">
+                <button class="btn btn-run-modern" onclick="runDESRound()">
+                  암호화 실행
+                </button>
+                <button class="btn btn-reset" onclick="resetDES()">
+                  초기화
+                </button>
+              </div>
+              <div class="des-two-col">
+                <div>
+                  <div class="step-label">L0 (왼쪽 32비트)</div>
+                  <div class="output-box highlight-modern" id="des-l0">—</div>
+                </div>
+                <div>
+                  <div class="step-label">R0 (오른쪽 32비트)</div>
+                  <div class="output-box highlight-modern" id="des-r0">—</div>
+                </div>
+              </div>
+              <div>
+                <div class="step-label">▼ R0 확장 (32→48bit Expansion)</div>
+                <div class="output-box" id="des-expand">—</div>
+              </div>
+              <div>
+                <div class="step-label">▼ 확장 R0 XOR 라운드 키 (48bit)</div>
+                <div class="output-box" id="des-xor">—</div>
+              </div>
+              <div>
+                <div class="step-label">▼ S-Box 치환 + P-Box 순열 (32bit)</div>
+                <div class="output-box" id="des-sbox">—</div>
+              </div>
+              <div class="des-two-col">
+                <div>
+                  <div class="step-label">L1 (기존 R0 복사)</div>
+                  <div class="output-box" id="des-l1">—</div>
+                </div>
+                <div>
+                  <div class="step-label">R1 (L0 XOR S-Box 결과)</div>
+                  <div class="output-box" id="des-r1">—</div>
+                </div>
+              </div>
+              <div>
+                <div class="step-label">1라운드 최종 결과 (Hex)</div>
+                <div
+                  class="output-box highlight-modern"
+                  id="des-final"
+                  style="font-weight: 700"
+                >—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4 · AES -->
+      <section class="panel" id="tab-aes">
+        <div class="panel-header">
+          <span class="era-badge badge-modern">대칭키</span>
+          <div>
+            <h2>AES 라운드 시뮬레이터</h2>
+            <span class="sub">Advanced Encryption Standard · 2001</span>
+          </div>
+        </div>
+        <div class="sim-grid" style="max-width: 860px">
+          <div class="sim-card" style="grid-column: 1/-1">
+            <div class="sim-card-header">
+              <h3 style="color: var(--modern)">4×4 State Matrix · 1라운드</h3>
+            </div>
+            <div class="sim-card-body">
+              <div class="des-two-col">
+                <div class="hex-cell">
+                  <div class="hex-label">평문 데이터 (Hex 32자리 · 16byte)</div>
+                  <div class="hex-field">
+                    <input class="hex-input" type="text" id="aes-data" maxlength="32" value="00112233445566778899AABBCCDDEEFF" />
+                    <div class="hex-ghost" id="aes-data-ghost"></div>
+                  </div>
+                </div>
+                <div class="hex-cell">
+                  <div class="hex-label">라운드 키 (Hex 32자리 · 16byte)</div>
+                  <div class="hex-field">
+                    <input class="hex-input" type="text" id="aes-key" maxlength="32" value="000102030405060708090A0B0C0D0E0F" />
+                    <div class="hex-ghost" id="aes-key-ghost"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-row" style="max-width: 360px">
+                <button class="btn btn-run-modern" onclick="runAESRound()">
+                  암호화 실행
+                </button>
+                <button class="btn btn-reset" onclick="resetAES()">
+                  초기화
+                </button>
+              </div>
+              <div class="matrix-section">
+                <div class="matrices-row">
+                  <div class="matrix-box">
+                    <div class="matrix-label">[0] 입력 State</div>
+                    <div class="matrix-grid" id="aes-m-input"></div>
+                  </div>
+                  <div class="matrix-box">
+                    <div class="matrix-label">[1] SubBytes</div>
+                    <div class="matrix-grid" id="aes-m-sub"></div>
+                  </div>
+                </div>
+                <div class="matrices-row">
+                  <div class="matrix-box">
+                    <div class="matrix-label">[2] ShiftRows</div>
+                    <div class="matrix-grid" id="aes-m-shift"></div>
+                  </div>
+                  <div class="matrix-box">
+                    <div class="matrix-label">[3] MixColumns</div>
+                    <div class="matrix-grid" id="aes-m-mix"></div>
+                  </div>
+                </div>
+                <div class="matrix-box" style="margin-top: 10px">
+                  <div class="matrix-label" style="color: var(--modern)">
+                    [4] AddRoundKey · 최종
+                  </div>
+                  <div class="matrix-grid" id="aes-m-roundkey"></div>
+                </div>
+              </div>
+              <div>
+                <div class="step-label">1라운드 출력 결과 (Hex)</div>
+                <div
+                  class="output-box highlight-modern"
+                  id="aes-final"
+                  style="font-weight: 700"
+                >—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5 · RSA -->
+      <section class="panel" id="tab-rsa">
+        <div class="panel-header">
+          <span class="era-badge badge-modern">공개키</span>
+          <div>
+            <h2>RSA 암호화 시뮬레이터</h2>
+            <span class="sub">Rivest–Shamir–Adleman · 1977</span>
+          </div>
+        </div>
+        <div class="sim-grid" style="max-width: 720px">
+          <div class="sim-card" style="grid-column: 1/-1">
+            <div class="sim-card-header">
+              <h3 style="color: var(--modern)">키 생성 + 암/복호화</h3>
+            </div>
+            <div class="sim-card-body">
+              <div
+                style="
+                  background: var(--surface2);
+                  border: 1px solid var(--border);
+                  border-radius: 6px;
+                  padding: 14px 16px;
+                  font-family: 'IBM Plex Mono', monospace;
+                  font-size: 0.8rem;
+                  line-height: 1.9;
+                  color: var(--text-dim);
+                "
+              >
+                <span style="color: var(--text-muted)">공개키</span> (N, e) =
+                (<span id="rsa-pub-N" style="color: var(--modern)">—</span>,
+                <span id="rsa-pub-e" style="color: var(--modern)">—</span>)
+                &nbsp;&nbsp;
+                <span style="color: var(--text-muted)">개인키</span> (N, d) =
+                (<span id="rsa-priv-N" style="color: var(--modern)">—</span>,
+                <span id="rsa-priv-d" style="color: var(--modern)">—</span>)
+              </div>
+              <div class="field">
+                <label>평문 입력</label>
+                <input type="text" id="rsa-plain" value="Hello RSA" />
+              </div>
+              <div class="btn-row" style="max-width: 360px">
+                <button class="btn btn-run-modern" onclick="runRSA()">
+                  암호화 실행
+                </button>
+                <button class="btn btn-reset" onclick="resetRSA()">
+                  초기화
+                </button>
+              </div>
+              <div>
+                <div class="step-label">1단계 · 유니코드 숫자 변환</div>
+                <div class="output-box" id="rsa-step-ascii">—</div>
+              </div>
+              <div>
+                <div class="step-label">2단계 · 암호화 (C = M^e mod N)</div>
+                <div class="output-box" id="rsa-step-enc">—</div>
+              </div>
+              <div>
+                <div class="step-label">3단계 · 복호화 (M = C^d mod N)</div>
+                <div class="output-box" id="rsa-step-dec">—</div>
+              </div>
+              <div>
+                <div class="step-label">4단계 · 복호화 완료</div>
+                <div
+                  class="output-box highlight-modern"
+                  id="rsa-final"
+                  style="font-weight: 700"
+                >—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6 · SHA-256 -->
+      <section class="panel" id="tab-sha">
+        <div class="panel-header">
+          <span class="era-badge badge-hash">해시</span>
+          <div>
+            <h2>SHA-256 시뮬레이터</h2>
+            <span class="sub">Secure Hash Algorithm · 2001</span>
+          </div>
+        </div>
+        <div class="sim-grid" style="max-width: 800px">
+          <div class="sim-card" style="grid-column: 1/-1">
+            <div class="sim-card-header">
+              <h3 style="color: var(--hash)">64라운드 압축 + 256bit 해시</h3>
+            </div>
+            <div class="sim-card-body">
+              <div class="field">
+                <label>해시할 메시지</label>
+                <input type="text" id="sha-input" value="Hello SHA" />
+              </div>
+              <div class="btn-row" style="max-width: 360px">
+                <button class="btn btn-run-hash" onclick="runSHA256()">
+                  해시 실행
+                </button>
+                <button class="btn btn-reset" onclick="resetSHA()">
+                  초기화
+                </button>
+              </div>
+              <div>
+                <div class="step-label">1단계 · 이진수 변환 (+ 1비트 패딩)</div>
+                <div
+                  class="output-box"
+                  id="sha-bin"
+                  style="
+                    font-size: 0.72rem;
+                    word-break: break-all;
+                    max-height: 64px;
+                    overflow: hidden;
+                  "
+                >—</div>
+              </div>
+              <div>
+                <div class="step-label">2단계 · 512bit 패딩 완성</div>
+                <div
+                  class="output-box"
+                  id="sha-padding"
+                  style="
+                    font-size: 0.65rem;
+                    word-break: break-all;
+                    max-height: 52px;
+                    overflow: hidden;
+                  "
+                >—</div>
+              </div>
+              <div>
+                <div class="step-label">
+                  3단계 · 1라운드 후 레지스터 상태 (A~H)
+                </div>
+                <div class="reg-grid" id="sha-regs">
+                  <div class="reg-box">
+                    <div class="reg-name">A</div>
+                    <div class="reg-val" id="sha-a">—</div>
+                  </div>
+                  <div class="reg-box">
+                    <div class="reg-name">B</div>
+                    <div class="reg-val" id="sha-b">—</div>
+                  </div>
+                  <div class="reg-box">
+                    <div class="reg-name">C</div>
+                    <div class="reg-val" id="sha-c">—</div>
+                  </div>
+                  <div class="reg-box">
+                    <div class="reg-name">D</div>
+                    <div class="reg-val" id="sha-d">—</div>
+                  </div>
+                  <div class="reg-box">
+                    <div class="reg-name">E</div>
+                    <div class="reg-val" id="sha-e">—</div>
+                  </div>
+                  <div class="reg-box">
+                    <div class="reg-name">F</div>
+                    <div class="reg-val" id="sha-f">—</div>
+                  </div>
+                  <div class="reg-box">
+                    <div class="reg-name">G</div>
+                    <div class="reg-val" id="sha-g">—</div>
+                  </div>
+                  <div class="reg-box">
+                    <div class="reg-name">H</div>
+                    <div class="reg-val" id="sha-h">—</div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="step-label">최종 256bit 해시 (64자 Hex)</div>
+                <div
+                  class="output-box highlight-hash"
+                  id="sha-final"
+                  style="font-weight: 700; word-break: break-all"
+                >—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <script src="shared.js"></script>
+    <script src="simulation.js"></script>
+  </body>
+</html>

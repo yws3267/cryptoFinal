@@ -1,0 +1,732 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+/* ── simulation 전용 변수 ── */
+:root {
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface2: #f8fafc;
+  --border: #e5e7eb;
+  --border2: #d1d5db;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --text-dim: #475569;
+
+  --ancient: #db2777;
+  --medieval: #d97706;
+  --modern: #059669;
+  --hash: #6366f1;
+
+  --ancient-bg: rgba(219, 39, 119, 0.08);
+  --medieval-bg: rgba(217, 119, 6, 0.08);
+  --modern-bg: rgba(5, 150, 105, 0.07);
+  --hash-bg: rgba(99, 102, 241, 0.08);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── site-header (sticky, sidebar 너비 고려) ── */
+.site-header {
+  border-bottom: 1px solid var(--border);
+  padding: 22px 40px 18px;
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+}
+.site-header h1 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #0f172a;
+}
+.site-header p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding-bottom: 2px;
+}
+
+/* ── 탭 네비 ── */
+.tab-nav {
+  display: flex;
+  gap: 4px;
+  padding: 20px 40px 0;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tab-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-btn {
+  padding: 10px 20px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.05em;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+  margin-bottom: -1px;
+}
+.tab-btn:hover {
+  color: var(--text-dim);
+}
+.tab-btn.active {
+  color: #0f172a;
+}
+
+.tab-btn[data-era='ancient'].active {
+  border-color: var(--ancient);
+  color: var(--ancient);
+}
+.tab-btn[data-era='medieval'].active {
+  border-color: var(--medieval);
+  color: var(--medieval);
+}
+.tab-btn[data-era='modern'].active {
+  border-color: var(--modern);
+  color: var(--modern);
+}
+.tab-btn[data-era='hash'].active {
+  border-color: var(--hash);
+  color: var(--hash);
+}
+
+/* ── 패널 ── */
+.panel {
+  display: none;
+  padding: 26px 40px;
+}
+.panel.active {
+  display: block;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.era-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 3px;
+}
+.badge-ancient {
+  background: var(--ancient-bg);
+  color: var(--ancient);
+  border: 1px solid rgba(219, 39, 119, 0.35);
+}
+.badge-medieval {
+  background: var(--medieval-bg);
+  color: var(--medieval);
+  border: 1px solid rgba(217, 119, 6, 0.35);
+}
+.badge-modern {
+  background: var(--modern-bg);
+  color: var(--modern);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.badge-hash {
+  background: var(--hash-bg);
+  color: var(--hash);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+
+.panel-header h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+.panel-header span.sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* ── 시뮬 그리드 ── */
+.sim-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.sim-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.sim-card:hover {
+  border-color: var(--border2);
+}
+
+.sim-card-header {
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sim-card-header h3 {
+  font-size: 0.92rem;
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.sim-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── 폼 요소 ── */
+.field label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.field input[type='text'],
+.field input[type='number'],
+.field textarea {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--border2);
+}
+.field textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.slider-row input[type='range'] {
+  flex: 1;
+  accent-color: var(--medieval);
+}
+.slider-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--medieval);
+  min-width: 28px;
+  text-align: right;
+}
+
+/* 버튼 */
+.btn-row {
+  display: flex;
+  gap: 8px;
+}
+.btn {
+  flex: 1;
+  padding: 9px 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.04em;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn:hover {
+  opacity: 0.85;
+}
+.btn-run-ancient {
+  background: var(--ancient);
+  color: #fff;
+}
+.btn-run-medieval {
+  background: var(--medieval);
+  color: #fff;
+}
+.btn-run-modern {
+  background: var(--modern);
+  color: #fff;
+}
+.btn-run-hash {
+  background: var(--hash);
+  color: #fff;
+}
+.btn-reset {
+  background: var(--surface2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+/* 결과 출력 */
+.output-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82rem;
+  min-height: 38px;
+  word-break: break-all;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+.output-box.highlight-ancient {
+  color: var(--ancient);
+  border-color: rgba(219, 39, 119, 0.35);
+}
+.output-box.highlight-medieval {
+  color: var(--medieval);
+  border-color: rgba(217, 119, 6, 0.35);
+}
+.output-box.highlight-modern {
+  color: var(--modern);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+.output-box.highlight-hash {
+  color: var(--hash);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.step-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+/* ── 단일 카드 (스키테일 · 카이사르) ── */
+.sim-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: 'IBM Plex Mono', monospace;
+}
+.sim-solo {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* ── 중세: 조정(좌) | 시각화(우) 2단 레이아웃 ── */
+.med-split {
+  display: grid;
+  grid-template-columns: minmax(280px, 340px) 1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+.med-controls {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.med-viz {
+  background: var(--medieval-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.med-viz-table {
+  align-items: flex-start;
+}
+.demo-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.demo-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.demo-input {
+  width: 100%;
+  padding: 9px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: 'IBM Plex Mono', monospace;
+  box-sizing: border-box;
+}
+.demo-input:focus {
+  border-color: var(--medieval);
+}
+.demo-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.demo-slider-row input[type='range'] {
+  flex: 1;
+  accent-color: var(--medieval);
+}
+.demo-slider-val {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--medieval);
+  min-width: 26px;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.demo-output-box {
+  background: #fff;
+  border: 1.5px solid #f0c98a;
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.95rem;
+  color: #92400e;
+  letter-spacing: 0.08em;
+  min-height: 42px;
+  word-break: break-all;
+  line-height: 1.6;
+}
+.vig-map {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 9px 12px;
+  word-break: break-all;
+}
+
+/* 알베르티 디스크 (시각화 우측) */
+.alberti-disk {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
+.disk-wrap {
+  position: relative;
+  width: 280px;
+  height: 280px;
+}
+.disk-wrap::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 12px solid #b45309;
+  z-index: 3;
+}
+#outerDisk {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #fef3c7;
+  border: 2px solid rgba(217, 119, 6, 0.45);
+}
+#innerDisk {
+  position: absolute;
+  top: 52px;
+  left: 52px;
+  width: 176px;
+  height: 176px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--medieval);
+  transition: transform 0.4s ease;
+}
+
+/* 비즈네르 타뷸라 렉타 (full-width · 행/열/칸 하이라이트) */
+.vigenere-table-wrap {
+  width: 100%;
+  margin-top: 0;
+}
+.vigenere-table-wrap h3 {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.vtable {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.vtable td {
+  text-align: center;
+  padding: 0;
+  font-size: 0.62rem;
+  line-height: 1.12;
+  color: var(--text-dim);
+  border: 1px solid #f3e6cf;
+}
+.vtable td.header {
+  background: #fdf3e3;
+  color: #92400e;
+  font-weight: 700;
+  border-color: #f0d9ad;
+}
+.vtable td.corner {
+  background: #fbe9cd;
+}
+.vtable td.col-hl {
+  background: #fdeecd;
+  color: #92400e;
+}
+.vtable td.row-hl {
+  background: #faecd2;
+  color: #92400e;
+}
+.vtable td.highlight {
+  background: var(--medieval);
+  color: #fff;
+  font-weight: 700;
+  outline: 2px solid #b45309;
+  outline-offset: -1px;
+}
+
+@media (max-width: 860px) {
+  .med-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* AES 행렬 */
+.matrix-section {
+  margin-top: 4px;
+}
+.matrix-label {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.matrices-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.matrix-title-sm {
+  font-size: 0.63rem;
+  color: var(--text-muted);
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+}
+.m-cell {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 5px 2px;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  border-radius: 3px;
+  color: var(--text-dim);
+}
+.m-cell.hl {
+  background: rgba(5, 150, 105, 0.08);
+  color: var(--modern);
+  border-color: rgba(5, 150, 105, 0.3);
+}
+
+/* DES 2열 그리드 */
+.des-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* SHA 레지스터 그리드 */
+.reg-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.reg-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 8px 4px;
+  text-align: center;
+}
+.reg-name {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-family: 'IBM Plex Mono', monospace;
+  margin-bottom: 3px;
+}
+.reg-val {
+  font-size: 0.7rem;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--hash);
+}
+
+/* ── 반응형 ── */
+@media (max-width: 700px) {
+  .site-header {
+    padding: 20px;
+  }
+  .tab-nav {
+    padding: 16px 20px 0;
+  }
+  .panel {
+    padding: 24px 16px;
+  }
+  .sim-grid {
+    grid-template-columns: 1fr;
+  }
+  .matrices-row {
+    grid-template-columns: 1fr;
+  }
+  .des-two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── DES·AES Hex 입력 가이드 (필요 글자수만큼 회색 중간점) ── */
+.hex-cell {
+  display: flex;
+  flex-direction: column;
+}
+.hex-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.hex-field {
+  position: relative;
+}
+.hex-input,
+.hex-ghost {
+  width: 100%;
+  height: 40px;
+  box-sizing: border-box;
+  padding: 0 13px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0;
+}
+.hex-input {
+  background: var(--surface2);
+  color: transparent;
+  caret-color: var(--modern);
+  line-height: 40px;
+  outline: none;
+  transition: border-color 0.2s;
+  position: relative;
+  z-index: 1;
+}
+.hex-input:focus {
+  border-color: var(--modern);
+}
+.hex-ghost {
+  position: absolute;
+  inset: 0;
+  border-color: transparent;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  white-space: pre;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+.hex-ghost .hx-c {
+  color: var(--text);
+}
+.hex-ghost .hx-d {
+  color: #cbd5e1;
+}
+
+/* ── 중세 시뮬레이터 초기화 버튼 (조정 박스 왼쪽 맨 아래) ── */
+.med-reset {
+  margin-top: auto;
+  align-self: flex-start;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--text-muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.med-reset:hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
